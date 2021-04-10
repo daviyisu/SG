@@ -42,7 +42,7 @@ class MyScene extends THREE.Scene {
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     this.axis = new THREE.AxesHelper (5);
     this.add (this.axis);
-    this.axis.position.y = 5;
+
     
     
     
@@ -50,7 +50,7 @@ class MyScene extends THREE.Scene {
     // Por último creamos el modelo.
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-    this.model = new Ejer5(this.gui,"Controles de la figura de revolución");
+    this.model = new Ejer5(this.gui,"Controles de la figura CSG");
     this.add (this.model);
   }
   
@@ -63,7 +63,7 @@ class MyScene extends THREE.Scene {
     // También se indica dónde se coloca
     this.camera.position.set (20, 10, 20);
     // Y hacia dónde mira
-    var look = new THREE.Vector3 (0,5,0);
+    var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
     this.add (this.camera);
     

@@ -4,17 +4,29 @@ class Ejer5 extends THREE.Object3D {
   constructor() {
     super();
     var material = new THREE.MeshPhongMaterial({ color: 0xff2d00  });
-    const esfera1 = new THREE.SphereGeometry(3);
-    const esfera2 = new THREE.SphereGeometry(3);
-    esfera1.translate(1,0);
-    esfera2.translate(-1,0);
-    var esfera1bsp = new ThreeBSP (esfera1);
-    var esfera2bsp = new ThreeBSP (esfera2);
 
-    var result = esfera1bsp.union(esfera2bsp);
-    var geometry = result.toGeometry();
-    var bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry);
-    this.final = new THREE.Mesh(bufferGeometry, material);
+    const cilindro = new THREE.CylinderGeometry(3,3,5);
+    var cilindrobsp = new ThreeBSP (cilindro);
+
+    const cilindroInterior = new THREE.CylinderGeometry(2.8,2.8,4.8);
+    cilindroInterior.translate(0,0.2,0);
+    var cilindroInteriorbsp = new ThreeBSP (cilindroInterior);
+
+    const asa = new THREE.TorusGeometry(1.5,0.3);
+    asa.translate(-3,0,0);
+    var asabsp = new ThreeBSP (asa);
+
+    const cajaAux = new THREE.BoxGeometry(2.8,4,3);
+    cajaAux.translate(-1.5,0,0);
+    var cajaAuxbsp = new ThreeBSP (cajaAux);
+   
+ 
+    var asafinal = asabsp.subtract(cajaAuxbsp);
+    var resultParcial = cilindrobsp.subtract(cilindroInteriorbsp);
+    var result = resultParcial.union(asafinal);
+    var taza = result.toGeometry();
+    var buffertaza = new THREE.BufferGeometry().fromGeometry(taza);
+    this.final = new THREE.Mesh(buffertaza, material);
     this.add(this.final);
     
     
@@ -25,7 +37,7 @@ class Ejer5 extends THREE.Object3D {
   }
 
   update() {
-    
+      this.final.rotation.y += 0.02;
   }
 
 
