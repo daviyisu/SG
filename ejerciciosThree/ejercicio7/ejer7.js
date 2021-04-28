@@ -4,20 +4,24 @@ import * as THREE from '../libs/three.module.js'
 class Ejer7 extends THREE.Object3D {
   constructor(gui, titleGui) {
     super();
+    this.h_original = 5;
+    this.h = this.h_original;
+    this.a = 0.5;
     this.createGUI(gui, titleGui);
     this.material = new THREE.MeshPhongMaterial({ color: 0xCF0000 });
-    this.material2 = new THREE.MeshPhongMaterial({ color: 0x00ffd8 });
+    this.material2 = new THREE.MeshPhongMaterial({ color: 0x00ffd8 }); 
+    this.material3 = new THREE.MeshPhongMaterial({ color: 0x0fff00 });
 
-    this.h = 5.0;
-    this.a = 0.5;
+    
 
 
 
 
     this.penduloGrande = this.createPenduloGrande();
-    //this.penduloSecundario = this.createPenduloSecundario();
+    this.penduloSecundario = this.createPenduloSecundario();
+    this.penduloGrande.add(this.penduloSecundario);
     this.add(this.penduloGrande);
-    //this.add(this.penduloSecundario);
+   
 
   }
 
@@ -62,16 +66,38 @@ class Ejer7 extends THREE.Object3D {
     return penduloPrincipal;
   }
 
+  createPenduloSecundario(){
+    var penduloReturn = new THREE.Object3D();
+    this.h_secundario = 2.5;
+    var geoSecundaria = new THREE.BoxGeometry(this.a, this.h_secundario, this.a);
+    geoSecundaria.translate(0, -this.h_secundario/2,0);
+    this.cajaSecundaria = new THREE.Mesh(geoSecundaria, this.material3);
+    this.cajaSecundaria.rotation.z = this.guiControls.rotacion2;
+    this.cajaSecundaria.position.y = (  -( this.small_h/2) - ( 0.1 * this.h ) ) - this.guiControls.movSecundario;
+    this.cajaSecundaria.scale.y = this.guiControls.escalaInf;
+    this.cajaSecundaria.position.z = this.a; 
+    
+    penduloReturn.add(this.cajaSecundaria);
+    return penduloReturn;
+  }
+
   createGUI(gui, titleGui) {
     // Controles para el movimiento de la parte móvil
     this.guiControls = new function () {
       this.rotacion = 0;
       this.escalaSup = 1;
-
+      this.movSecundario = 0;
+      this.rotacion2 = 0;
+      this.escalaInf = 1;
+      
 
       this.reset = function () {
         this.rotacion = 0;
         this.escalaSup = 1;
+        this.movSecundario = 0;
+        this.rotacion2 = 0;
+        this.escalaInf = 1;
+       
       }
     }
 
@@ -81,18 +107,29 @@ class Ejer7 extends THREE.Object3D {
     var folder = gui.addFolder(titleGui);
     // Estas lineas son las que añaden los componentes de la interfaz
     // Las tres cifras indican un valor mínimo, un máximo y el incremento
-    folder.add(this.guiControls, 'rotacion', -1, 1, 0.001).name('Rotación : ').listen();
+    var amplitud_giro = THREE.MathUtils.degToRad(45);
+    folder.add(this.guiControls, 'rotacion', -amplitud_giro, amplitud_giro, 0.001).name('Rotación sup. : ').listen();
     folder.add(this.guiControls, 'escalaSup', 1, 2, 0.001).name('Escalado : ').listen();
+    folder.add(this.guiControls, 'movSecundario', 0, this.h*0.9, 0.001).name('Movimiento secundario : ').listen();
+    folder.add(this.guiControls, 'rotacion2', -amplitud_giro, amplitud_giro, 0.001).name('Rotación inf.. : ').listen();
+    folder.add(this.guiControls, 'escalaInf', 1, 2, 0.001).name('Escalado inferior : ').listen();
 
     folder.add(this.guiControls, 'reset').name('[ Reset ]');
   }
 
+  
+
 
   update() {
+   // this.h = this.h * this.guiControls.escalaSup;
     this.penduloGrande.rotation.z = this.guiControls.rotacion;
+    this.cajaSecundaria.rotation.z = this.guiControls.rotacion2;
     this.cajaGrande.scale.y = this.guiControls.escalaSup;
     this.cajaPequenia2.position.y = (-this.small_h) - (this.h * this.guiControls.escalaSup);
-
+    this.cajaSecundaria.scale.y = this.guiControls.escalaInf;
+    this.cajaSecundaria.position.y = (  -( this.small_h/2) - ( 0.1 * this.h ) ) - this.guiControls.movSecundario;
+    this.cajaSecundaria.position.z = this.a; 
+   
 
   }
 

@@ -42,7 +42,7 @@ class Ejer4 extends THREE.Object3D {
     const geometry = new THREE.ExtrudeGeometry(example, extrudeSettings);
     const geometry2 = new THREE.ExtrudeGeometry(exampleSinBisel, extrudeSettings2);
 
-    var geo = new THREE.ExtrudeBufferGeometry(barr, options);   //NO SABES PORQUE NO SE MUESTRA
+    var geo = new THREE.ExtrudeBufferGeometry(barr, options);   
     this.barrido = new THREE.Mesh(geo, material);
     this.barrido.position.y = 5;
     this.barrido.position.x = -10;

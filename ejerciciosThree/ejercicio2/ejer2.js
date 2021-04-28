@@ -3,7 +3,7 @@ import * as THREE from '../libs/three.module.js'
 class Ejer2 extends THREE.Object3D {
   constructor() { // sería constructor(gui, titleGui) pero como no voy a hacerlo interactivo no tiene parámetros.
     super();
-    //this.createGUI(gui, titleGui);
+    
     this.createBox();
     this.createCone();
     this.createCylinder();
